@@ -302,6 +302,45 @@
     }
     footer a { color: var(--accent2); text-decoration: none; }
 
+
+    /* ── LIGHT MODE ── */
+    body.light {
+      --bg:      #f0f4ff;
+      --surface: #e4e9f7;
+      --card:    #ffffff;
+      --border:  #c7cfea;
+      --text:    #1a1f3c;
+      --muted:   #5a6080;
+    }
+    body.light header {
+      background: linear-gradient(135deg, #1a0a3e 0%, #2d1b69 50%, #0a1f3d 100%);
+    }
+    body.light tbody tr:hover { background: rgba(124,58,237,0.06); }
+    body.light tbody tr:nth-child(even) { background: rgba(0,0,0,0.03); }
+    body.light tbody tr:nth-child(even):hover { background: rgba(124,58,237,0.06); }
+
+    /* ── TOGGLE BUTTON ── */
+    #theme-toggle {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 999;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50px;
+      padding: 8px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    #theme-toggle:hover { border-color: var(--accent1); }
+
     @media (max-width: 640px) {
       .stat { min-width: 50%; }
       .actions { flex-direction: column; align-items: center; }
@@ -309,6 +348,11 @@
   </style>
 </head>
 <body>
+
+<button id="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+  <span id="theme-icon">☀️</span>
+  <span id="theme-label">Light Mode</span>
+</button>
 
 <!-- ══════════════ HEADER ══════════════ -->
 <header>
@@ -1016,6 +1060,40 @@
   <p>Microsoft Naija Security Group · SC-500 Mentorship Program 2026 · <a href="https://github.com/Microsoft-Naija-Security-Usergroup/github-onboarding-workshop" target="_blank">GitHub Repo</a> · <a href="https://learn.microsoft.com/en-us/certifications/exams/sc-500/" target="_blank">SC-500 Exam</a></p>
   <p style="margin-top:8px;">Organised by <strong>Emmanuel Itoje</strong> · <strong>Oyimafu Emmanuel</strong> · <strong>Chidimma Ugwu</strong> · <strong>Amos Adereti</strong></p>
 </footer>
+
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const icon = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+    if (body.classList.contains('light')) {
+      body.classList.remove('light');
+      icon.textContent = '☀️';
+      label.textContent = 'Light Mode';
+      localStorage.setItem('mnsug-theme', 'dark');
+    } else {
+      body.classList.add('light');
+      icon.textContent = '🌙';
+      label.textContent = 'Dark Mode';
+      localStorage.setItem('mnsug-theme', 'light');
+    }
+  }
+
+  // Restore preference on load
+  (function() {
+    const saved = localStorage.getItem('mnsug-theme');
+    if (saved === 'light') {
+      document.body.classList.add('light');
+      document.addEventListener('DOMContentLoaded', function() {
+        const icon = document.getElementById('theme-icon');
+        const label = document.getElementById('theme-label');
+        if (icon) icon.textContent = '🌙';
+        if (label) label.textContent = 'Dark Mode';
+      });
+    }
+  })();
+</script>
 
 </body>
 </html>
